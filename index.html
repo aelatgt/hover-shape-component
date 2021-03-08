@@ -1,0 +1,24 @@
+<html>
+	<head>
+		<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+		<script src="assets/components/hover-shape.js"></script>
+		<script src="assets/components/raycaster-autorefresh.js"></script>
+		<script src="assets/components/hover.js"></script>
+ </head>
+	<body>
+		<a-scene raycaster-autorefresh>
+			<a-gltf-model src= "assets/mega_scene/scene.gltf" position= "0 -2 25"></a-gltf-model>
+			<a-camera>
+				<a-entity cursor="fuse: true; fuseTimeout: 500"
+					position="0 0 -1"
+					geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+					material="color: black; shader: flat">
+				</a-entity>
+			</a-camera>
+			<a-entity hover-shape= "index: 0" geometry= "primitive: octahedron; width: 1; height: 1; depth: 1" position="1 0.75 -3" radius="0.5" height="1.5" material= "color: gray"></a-entity>
+			<a-sky color="lightblue"></a-sky>
+		</a-scene>
+	</body>
+</html>
+
+			

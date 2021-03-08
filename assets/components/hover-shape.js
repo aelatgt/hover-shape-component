@@ -7,12 +7,13 @@ AFRAME.registerComponent('hover-shape', {
     },
     init: function () {
         this.onNext = this.onNext.bind(this);
-        NAF.utils
+        NAF.utils // Is this necessary code?
         .getNetworkedEntity(this.el)
         .then(networkedEl => {
             this.networkedEl = networkedEl;
             this.networkedEl.object3D.addEventListener('interact', this.onNext());
         });
+        document.querySelector('a-scene').addEventListener('click', this.onNext); //Temporary solution to event listeners in Mozilla Hubs.
     },
     tick: function () {
 		var el = this.el;
@@ -40,8 +41,11 @@ newEntity.setAttribute("class", "interactable");
 let tempAtt = document.createAttribute("hover-shape");
 tempAtt.value = "index: 0"
 newEntity.setAttributeNode(tempAtt);
-tempAtt = document.createAttribute("geometry")
+tempAtt = document.createAttribute("geometry");
 tempAtt.value = "primitive: box; width: 1; height: 1; depth: 1";
+newEntity.setAttributeNode(tempAtt);
+tempAtt = document.createAttribute("material");
+tempAtt.value = "color: white;"
 newEntity.setAttributeNode(tempAtt);
 
 //Adding entity to template and adding to assets? Does this mean that all changes to a template's attribute data will be synced?

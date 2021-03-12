@@ -1,5 +1,6 @@
-const SHAPES = ['box', 'cone', 'dodecahedron', 'octahedron', 'sphere'];
+//This script will require that Matt's single-action-button.js script has been served and already injected into the hubs client as it simplifies the interaction signifiacntly.'
 
+const SHAPES = ['box', 'cone', 'dodecahedron', 'octahedron', 'sphere'];
 
 AFRAME.registerComponent('hover-shape', {
     schema: {
@@ -7,13 +8,7 @@ AFRAME.registerComponent('hover-shape', {
     },
     init: function () {
         this.onNext = this.onNext.bind(this);
-        NAF.utils // Is this necessary code?
-        .getNetworkedEntity(this.el)
-        .then(networkedEl => {
-            this.networkedEl = networkedEl;
-            this.networkedEl.object3D.addEventListener('interact', this.onNext());
-        });
-        document.querySelector('a-scene').addEventListener('click', this.onNext); //Temporary solution to event listeners in Mozilla Hubs.
+        this.el.addEventListener('click', this.onNext);
     },
     tick: function () {
 		var el = this.el;
@@ -29,28 +24,21 @@ AFRAME.registerComponent('hover-shape', {
 });
 
 //Query assets in order to setup template
-let assets = document.querySelector("a-assets");
-// create a new template variable
-let shapeHoverTemplate = document.createElement("template");
-shapeHoverTemplate.id = "hover-shape";
-let newEntity = document.createElement("a-entity");
-
-newEntity.setAttribute("class", "interactable");
-
-//tempAtt var allows for multiple attributes to be reused.
-let tempAtt = document.createAttribute("hover-shape");
-tempAtt.value = "index: 0"
-newEntity.setAttributeNode(tempAtt);
-tempAtt = document.createAttribute("geometry");
-tempAtt.value = "primitive: box; width: 1; height: 1; depth: 1";
-newEntity.setAttributeNode(tempAtt);
-tempAtt = document.createAttribute("material");
-tempAtt.value = "color: white;"
-newEntity.setAttributeNode(tempAtt);
-
-//Adding entity to template and adding to assets? Does this mean that all changes to a template's attribute data will be synced?
-shapeHoverTemplate.content.appendChild(newEntity);
-assets.appendChild(shapeHoverTemplate);
+const assets = document.querySelector("a-assets");
+assets.insertAdjacentHTML(
+  'beforeend',
+  `
+  <template id="hover-shape-media">
+    <a-entity
+      hover-shape="index: 0"
+      geometry="primitive: box; width: 1; height: 1; depth: 1"
+      material="color: blue; shader: flat"
+      single-action-button="event: click"
+      randomize-networked-color="event: click"
+    ></a-entity>
+  </template>
+`
+)
 
 const vectorRequiresUpdate = epsilon => {
 		return () => {
@@ -69,19 +57,15 @@ const vectorRequiresUpdate = epsilon => {
 	};
 
 NAF.schemas.add({
-  	template: "#hover-shape",
+  	template: "#hover-shape-media",
     components: [
     {
       	component: "position",
       	requiresNetworkUpdate: vectorRequiresUpdate(0.001)
     },
     {
-      	component: "rotation",
-      	requiresNetworkUpdate: vectorRequiresUpdate(0.5)
-    },
-    {
-      	component: "scale",
-      	requiresNetworkUpdate: vectorRequiresUpdate(0.001)
+        component: "material",
+        property: 'color',
     },
     {
       	component: "hover-shape",
@@ -95,7 +79,11 @@ NAF.schemas.add({
   });
 
 var el = document.createElement("a-entity");
-el.setAttribute("networked", { template: "#hover-shape" } );
+el.setAttribute("networked", { 
+    template: "#hover-shape-media",
+    networkId: 'shapeButton',
+    owner: 'scene',
+  });
 AFRAME.scenes[0].appendChild(el);
 
 function testNext(nextIndex) {

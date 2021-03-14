@@ -1,5 +1,29 @@
 //This script will require that Matt's single-action-button.js script has been served and already injected into the hubs client as it simplifies the interaction signifiacntly.'
 
+/**
+ * Sets up an entity for the SingleActionButton interaction system
+ * so it will receive events when clicked.
+ */
+
+AFRAME.registerComponent('single-action-button', {
+  schema: {
+    event: { type: 'string' },
+  },
+  init: function () {
+    // These first two lines tell Hubs' interaction system to pay attention to us
+    this.el.classList.add('interactable')
+    this.el.setAttribute('is-remote-hover-target', '')
+
+    // This tag tells the button system to emit 'interact' events on our object
+    this.el.setAttribute('tags', { singleActionButton: true })
+
+    // Finally, we'll forward the 'interact' events to our entity for convenience
+    this.el.object3D.addEventListener('interact', () =>
+      this.el.emit(this.data.event)
+    )
+  },
+})
+
 const SHAPES = ['box', 'cone', 'dodecahedron', 'octahedron', 'sphere'];
 
 AFRAME.registerComponent('hover-shape', {
@@ -15,11 +39,13 @@ AFRAME.registerComponent('hover-shape', {
 		el.setAttribute('position', '1 ' + (.75 + Math.sin(Date.now() / 500) * .25) + ' -3');
 	},
     onNext() {
-           //if (this.networkedEl && !NAF.utils.isMine(this.networkedEl) && !NAF.utils.takeOwnership(this.networkedEl)) return;
-           var newIndex = (this.data.index + 1) % SHAPES.length;
-           this.el.setAttribute("hover-shape", "index", newIndex);
-           this.el.setAttribute('geometry', 'primitive', SHAPES[newIndex]);
-           console.log('cursor registered click event.');
+        if (NAF.connection.isConnected()) {
+            NAF.utils.takeOwnership(this.el);
+            var newIndex = (this.data.index + 1) % SHAPES.length;
+            this.el.setAttribute("hover-shape", "index", newIndex);
+            this.el.setAttribute('geometry', 'primitive', SHAPES[newIndex]);
+            console.log('cursor registered click event.');
+        }
     }
 });
 

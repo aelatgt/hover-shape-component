@@ -36,7 +36,7 @@ AFRAME.registerComponent('hover-shape', {
     },
     tick: function () {
 		var el = this.el;
-		el.setAttribute('position', '1 ' + (.75 + Math.sin(Date.now() / 500) * .25) + ' -3');
+		el.setAttribute('position', el.object3D.position.x + ', ' + (.75 + Math.sin(Date.now() / 500) * .25) + ', ' + el.object3D.position.z);
 	},
     onNext() {
         if (NAF.connection.isConnected()) {
@@ -61,6 +61,7 @@ assets.insertAdjacentHTML(
       material="color: blue; shader: flat"
       single-action-button="event: click"
       randomize-networked-color="event: click"
+      drag-scale
     ></a-entity>
   </template>
 `
@@ -90,8 +91,8 @@ NAF.schemas.add({
       	requiresNetworkUpdate: vectorRequiresUpdate(0.001)
     },
     {
-        component: "material",
-        property: 'color',
+        component: "rotation",
+        requiresNetworkUpdate: vectorRequiresUpdate(0.001)
     },
     {
       	component: "hover-shape",
@@ -110,6 +111,8 @@ el.setAttribute("networked", {
     networkId: 'shapeButton',
     owner: 'scene',
   });
+const player = document.querySelector('#avatar-rig').object3D;
+el.setAttribute('position', player.position);
 AFRAME.scenes[0].appendChild(el);
 
 function testNext(nextIndex) {

@@ -42,7 +42,7 @@ AFRAME.registerComponent('drag-rotate', {
       //Update the rotation of the object as the horizontal change in the cursor position.
       this.el.object3D.rotation.y = dx + this.el.object3D.rotation.y;
 
-      // Store cursor position for next frame. This is not necesasary for this implementation.
+      // Store cursor position for next frame.
       this.prevPosition.copy(this.dragCursor.position)
     }
   },

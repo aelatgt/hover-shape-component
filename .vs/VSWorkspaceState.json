@@ -1,10 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\assets",
-    "\\assets\\components",
-    "\\assets\\mega_scene"
+    ""
   ],
-  "SelectedNode": "\\assets\\components\\drag-scale.js",
+  "SelectedNode": "\\scripts",
   "PreviewInSolutionExplorer": false
 }

@@ -72,6 +72,10 @@ AFRAME.registerComponent('single-action-button', {
   },
 })
 
+/**
+ * Component to give a hubs entity a constant hover, and click functionality to cycle through shapes.
+ */
+
 AFRAME.registerComponent('hover-shape', {
     schema: {
         index: {default: 0},
@@ -158,8 +162,7 @@ el.setAttribute("networked", {
     networkId: 'shapeButton',
     owner: 'scene',
   });
-AFRAME.scenes[0].appendChild(el);
-
 const player = document.querySelector('#avatar-rig').object3D;
+AFRAME.scenes[0].appendChild(el);
 el.object3D.position.x = player.position.x;
 el.object3D.position.z = player.position.y;

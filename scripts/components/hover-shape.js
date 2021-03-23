@@ -24,6 +24,9 @@ AFRAME.registerComponent('single-action-button', {
   },
 })
 
+/**
+ * Component to give a hubs entity a constant hover, and click functionality to cycle through shapes.
+ */
 
 AFRAME.registerComponent('hover-shape', {
     schema: {

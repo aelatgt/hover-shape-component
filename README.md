@@ -3,7 +3,7 @@ This repository contains multiple scripts to define and inject networked aframe 
 If you click the a-entity and drag the cursor horizontally, you will rotate the a-entity. This is some experimentation done with the different types of inputs to interact with
 Hubs and networked components.
 
-The components necessary are the drag-rotate component, the single-action-button component, which is from Matt's hubs-scripting-guide tutorial, and the hover-shape component.
+The components necessary are the drag-rotate component, the single-action-button component, which is from Matt's https://github.com/aelatgt/hubs-scripting-guide tutorial, and the hover-shape component.
 The hover-shape-combined.js file registers all of these components, as well as registers the new template which depends on them, and adds an a-entity with the template to a
 scene. These are based off of the examples within hubs-scripting-guide.
 

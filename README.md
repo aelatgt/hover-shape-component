@@ -5,7 +5,7 @@ Hubs and networked components.
 
 The components necessary are the drag-rotate component, the single-action-button component, which is from Matt's hubs-scripting-guide tutorial, and the hover-shape component.
 The hover-shape-combined.js file registers all of these components, as well as registers the new template which depends on them, and adds an a-entity with the template to a
-scene.
+scene. These are based off of the examples within hubs-scripting-guide.
 
 To inject this script into a Hubs room:
 1. Copy the link from glitch.io where the combined script is currently served: https://bubbly-abrupt-pin.glitch.me/hover-shape-combined.js

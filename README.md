@@ -1,5 +1,5 @@
 This repository contains multiple scripts to define and inject networked aframe components into a hubs scene. The script will inject an entity with a custom template
-#hover-shape-media, which will create a 3D a-entity with geometry to appear in a Hubs room. When clicked directly the a-entity will cycle through different 3D primitive shapes.
+#hover-shape-media, which will create a 3D a-entity with geometry to appear in a Hubs room. There will also be a small one-sided plane to act as a controller in front of the entity. When clicked directly, the a-entity will cycle through different 3D primitive shapes.
 If you click the a-entity and drag the cursor horizontally, you will rotate the a-entity. This is some experimentation done with the different types of inputs to interact with
 Hubs and networked components.
 

@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\scripts",
+    "\\scripts\\components"
   ],
-  "SelectedNode": "\\scripts",
+  "SelectedNode": "\\scripts\\components\\drag-rotate.js",
   "PreviewInSolutionExplorer": false
 }

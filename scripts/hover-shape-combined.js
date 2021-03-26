@@ -34,14 +34,16 @@ AFRAME.registerComponent('drag-rotate', {
     if (this.dragCursor) {
       // Compute change in cursor position
       const dx = this.dragCursor.position.x - this.prevPosition.x;
+      const dz = this.dragCursor.position.z - this.prevPosition.z;
 
       // Take ownership of the `networked` entity and update the networked radius
       if (NAF.connection.isConnected()) {
         NAF.utils.takeOwnership(this.el)
       }
       //Update the rotation of the object as the horizontal change in the cursor position.
-      this.el.object3D.rotation.y = dx + this.el.object3D.rotation.y;
-
+      var sensitivity = .75;
+      this.el.object3D.rotation.y = (dx + dz) * sensitivity + this.el.object3D.rotation.y;
+      //this.el.object3D.lookAt(this.dragCursor.position);
       // Store cursor position for next frame.
       this.prevPosition.copy(this.dragCursor.position)
     }
@@ -67,7 +69,7 @@ AFRAME.registerComponent('single-action-button', {
 
     // Finally, we'll forward the 'interact' events to our entity for convenience
     this.el.object3D.addEventListener('interact', () =>
-      this.el.emit(this.data.event)
+      this.el.emit(this.data.event, {el: this.el}, true)
     )
   },
 })
@@ -84,7 +86,7 @@ AFRAME.registerComponent('hover-shape', {
         //Define the different shapes that we will cycle through
         this.SHAPES = ['box', 'cone', 'dodecahedron', 'octahedron', 'sphere', 'torus', 'tetrahedron'];
         this.onNext = this.onNext.bind(this);
-        this.el.addEventListener('click', this.onNext);
+        this.el.sceneEl.addEventListener('nextShape', this.onNext);
     },
     tick: function () {
 		var el = this.el;
@@ -109,9 +111,8 @@ assets.insertAdjacentHTML(
   <template id="hover-shape-media">
     <a-entity
       hover-shape="index: 0"
-      geometry="primitive: box; width: 1; height: 1; depth: 1"
+      geometry="primitive: box;"
       material="color: blue;"
-      single-action-button="event: click"
       drag-rotate
     ></a-entity>
   </template>
@@ -162,7 +163,14 @@ el.setAttribute("networked", {
     networkId: 'shapeButton',
     owner: 'scene',
   });
-const player = document.querySelector('#avatar-rig').object3D;
+//Setups controller object
+var elController = document.createElement("a-entity");
+elController.setAttribute("geometry", "primitive", "plane");
+elController.setAttribute("single-action-button", "event", "nextShape");
+//Set position
 AFRAME.scenes[0].appendChild(el);
+AFRAME.scenes[0].appendChild(elController);
+const player = document.querySelector('#avatar-rig').object3D;
 el.object3D.position.x = player.position.x;
 el.object3D.position.z = player.position.y;
+elController.object3D.position.z = el.object3D.position.z + 1;

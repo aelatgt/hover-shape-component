@@ -8,7 +8,7 @@ The hover-shape-combined.js file registers all of these components, as well as r
 scene. These are based off of the examples within hubs-scripting-guide.
 
 To inject this script into a Hubs room:
-1. Copy the link from glitch.io where the combined script is currently served: https://bubbly-abrupt-pin.glitch.me/hover-shape-combined.js
+1. Copy the link from glitch.com where the combined script is currently served: https://bubbly-abrupt-pin.glitch.me/hover-shape-combined.js
 2. Paste in the Custom Scripts in Room Settings of a Hubs Room and hit Apply.
 3. Reload the Hubs room and the a-entity should be present and networked across all clients.
 Note: As of now the position of the cube is fixed, so you may want to test on the WideOpenSpace scene or other less busy scenes that spawn you near the origin.

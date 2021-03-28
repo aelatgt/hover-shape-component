@@ -16,6 +16,7 @@ AFRAME.registerComponent('drag-rotate', {
 
     this.dragCursor = null // This will hold the cursor performing the drag, if any
     this.prevPosition = new THREE.Vector3() // Position of the cursor on the previous frame. Useful for determining speed of the drag.
+    this.prevRotation = new THREE.Vector3() // Rotation of the cursor on the previous frame.
 
     // Set up handlers for those events we enabled earlier
     this.el.object3D.addEventListener(
@@ -23,6 +24,7 @@ AFRAME.registerComponent('drag-rotate', {
       ({ object3D }) => {
         this.dragCursor = object3D
         this.prevPosition.copy(object3D.position)
+        this.prevRotation.copy(object3D.rotation)
       }
     )
     this.el.object3D.addEventListener('holdable-button-up', () => {
@@ -35,6 +37,7 @@ AFRAME.registerComponent('drag-rotate', {
       // Compute change in cursor position
       const dx = this.dragCursor.position.x - this.prevPosition.x;
       const dz = this.dragCursor.position.z - this.prevPosition.z;
+      const dr = this.dragCursor.rotation.y - this.prevRotation.y;
 
       // Take ownership of the `networked` entity and update the networked radius
       if (NAF.connection.isConnected()) {
@@ -43,9 +46,10 @@ AFRAME.registerComponent('drag-rotate', {
       //Update the rotation of the object as the horizontal change in the cursor position.
       var sensitivity = .75;
       this.el.object3D.rotation.y = (dx + dz) * sensitivity + this.el.object3D.rotation.y;
-      //this.el.object3D.lookAt(this.dragCursor.position);
+     
       // Store cursor position for next frame.
       this.prevPosition.copy(this.dragCursor.position)
+      this.prevRotation.copy(this.dragCursor.rotation)
     }
   },
 })

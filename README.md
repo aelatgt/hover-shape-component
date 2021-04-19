@@ -10,5 +10,7 @@ scene. These are based off of the examples within hubs-scripting-guide.
 To inject this script into a Hubs room:
 1. Copy the link to the script being served statically on GitHub Pages: https://www.aelatgt.org/hover-shape-component/scripts/hover-shape-combined.js
 2. Paste in the Custom Scripts in Room Settings of a Hubs Room and hit Apply.
-3. Reload the Hubs room and the a-entity should be present and networked across all clients.
+3. Reload the Hubs room
+4. Drag the hover-controller.glb and the hover-shape.glb files into the room to place them.
+5. Now the entity will change shape when the controller is pressed.
 Note: As of now the position of the cube is fixed, so you may want to test on the WideOpenSpace scene or other less busy scenes that spawn you near the origin.

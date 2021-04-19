@@ -46,13 +46,13 @@ AFRAME.registerComponent('drag-scale', {
       this.el.object3D.scale.x = this.el.object3D.scale.x + dy;
       this.el.object3D.scale.z = this.el.object3D.scale.z + dy;
       if (this.el.object3D.scale.y > this.scaleMax.y) {
-            this.el.object3D.scale.y = this.scaleMax.y;
-            this.el.object3D.scale.x = this.scaleMax.x;
-            this.el.object3D.scale.z = this.scaleMax.z;
+            this.el.object3D.scale.x = this.scaleMax.x
+            this.el.object3D.scale.y = this.scaleMax.y
+            this.el.object3D.scale.z = this.scaleMax.z      
       } else if (this.el.object3D.scale.y < this.scaleMin.y) {
-            this.el.object3D.scale.y = this.scaleMin.y;
-            this.el.object3D.scale.x = this.scaleMin.x;
-            this.el.object3D.scale.z = this.scaleMin.z;
+            this.el.object3D.scale.x = this.scaleMin.x
+            this.el.object3D.scale.y = this.scaleMin.y
+            this.el.object3D.scale.z = this.scaleMin.z          
       }
       // Store cursor position for next frame.
       this.prevPosition.copy(this.dragCursor.position)
@@ -150,6 +150,7 @@ AFRAME.registerComponent('hover-shape', {
     init: function () {
         //Define the different shapes that we will cycle through
         this.SHAPES = ['box', 'cone', 'dodecahedron', 'octahedron', 'sphere', 'torus', 'tetrahedron'];
+        this.index = this.data.index;
         this.onNext = this.onNext.bind(this);
         this.el.sceneEl.addEventListener('nextShape', this.onNext);
     },
@@ -157,13 +158,16 @@ AFRAME.registerComponent('hover-shape', {
 		var el = this.el;
         //This is one way simply way to get the hovering effect on the entity.
 		el.setAttribute('position', el.object3D.position.x + ', ' + (.75 + Math.sin(Date.now() / 500) * .25) + ', ' + el.object3D.position.z);
+        if (this.index != this.data.index) {
+            this.index = this.data.index;
+            this.el.setAttribute('geometry', 'primitive', this.SHAPES[this.index]);
+        }
 	},
     onNext() { //Update the geometry primitive on click event 
         if (NAF.connection.isConnected()) {
             NAF.utils.takeOwnership(this.el);
             var newIndex = (this.data.index + 1) % this.SHAPES.length;
             this.el.setAttribute("hover-shape", "index", newIndex);
-            this.el.setAttribute('geometry', 'primitive', this.SHAPES[newIndex]);
         }
     }
 });
@@ -205,10 +209,6 @@ NAF.schemas.add({
   	template: "#hover-shape-media",
     components: [
     {
-      	component: "position",
-      	requiresNetworkUpdate: vectorRequiresUpdate(0.001)
-    },
-    {
         component: "rotation",
         requiresNetworkUpdate: vectorRequiresUpdate(0.001)
     },
@@ -219,28 +219,23 @@ NAF.schemas.add({
     {
       	component: "hover-shape",
       	property: "index"
-    },
-    {
-        component: "geometry",
-        property: "primitive"
     }
     ],
   });
 
-var el = document.createElement("a-entity");
-el.setAttribute("networked", { 
-    template: "#hover-shape-media",
-    networkId: 'shapeButton',
-    owner: 'scene',
-  });
-//Setups controller object
-var elController = document.createElement("a-entity");
-elController.setAttribute("geometry", "primitive", "plane");
-elController.setAttribute("single-action-button", "event", "nextShape");
-//Set position
-AFRAME.scenes[0].appendChild(el);
-AFRAME.scenes[0].appendChild(elController);
-const player = document.querySelector('#avatar-rig').object3D;
-el.object3D.position.x = player.position.x;
-el.object3D.position.z = player.position.y;
-elController.object3D.position.z = el.object3D.position.z + 1;
+AFRAME.GLTFModelPlus.registerComponent('networked', 'networked')
+AFRAME.GLTFModelPlus.registerComponent('geometry', 'geometry')
+AFRAME.GLTFModelPlus.registerComponent('single-action-button', 'single-action-button')
+
+const entity = document.createElement('a-entity')
+entity.setAttribute('position', { x: 0, y: 2, z: 0 })
+
+entity.setAttribute('networked', {
+  template: '#hover-shape-media', // Selector for our template
+  networkId: 'hoverShape', // A fixed networkId makes this entity shared for all clients
+  owner: 'scene', // Prevents newly joined clients from re-initializing the color
+})
+
+AFRAME.GLTFModelPlus.registerComponent('networked', 'networked')
+AFRAME.GLTFModelPlus.registerComponent('geometry', 'geometry')
+AFRAME.GLTFModelPlus.registerComponent('single-action-button', 'single-action-button')

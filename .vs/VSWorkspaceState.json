@@ -1,9 +1,10 @@
 {
   "ExpandedNodes": [
     "",
+    "\\glb",
     "\\scripts",
     "\\scripts\\components"
   ],
-  "SelectedNode": "\\index.html",
+  "SelectedNode": "\\scripts\\components\\drag-rotate.js",
   "PreviewInSolutionExplorer": false
 }

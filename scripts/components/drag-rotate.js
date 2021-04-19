@@ -53,3 +53,15 @@ AFRAME.registerComponent('drag-rotate', {
     }
   },
 })
+
+    getScreenTranslation = function (obj, camera) {
+        var vector = new THREE.Vector3();
+
+        vector.setFromMatrixPosition(obj.matrixWorld);
+        vector.project(camera);
+
+        return {
+                x: vector.x,
+                y: vector.y
+        };
+   };

@@ -226,16 +226,3 @@ NAF.schemas.add({
 AFRAME.GLTFModelPlus.registerComponent('networked', 'networked')
 AFRAME.GLTFModelPlus.registerComponent('geometry', 'geometry')
 AFRAME.GLTFModelPlus.registerComponent('single-action-button', 'single-action-button')
-
-const entity = document.createElement('a-entity')
-entity.setAttribute('position', { x: 0, y: 2, z: 0 })
-
-entity.setAttribute('networked', {
-  template: '#hover-shape-media', // Selector for our template
-  networkId: 'hoverShape', // A fixed networkId makes this entity shared for all clients
-  owner: 'scene', // Prevents newly joined clients from re-initializing the color
-})
-
-AFRAME.GLTFModelPlus.registerComponent('networked', 'networked')
-AFRAME.GLTFModelPlus.registerComponent('geometry', 'geometry')
-AFRAME.GLTFModelPlus.registerComponent('single-action-button', 'single-action-button')

@@ -25,7 +25,7 @@
             "extensions": {
                 "MOZ_hubs_components": {
                     "networked": {
-                        "template": "#hover-shape-template",
+                        "template": "#hover-shape-media",
                         "networkID": "hover-shape",
                         "owner": "scene"
                     }

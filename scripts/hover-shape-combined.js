@@ -54,6 +54,8 @@ AFRAME.registerComponent('drag-scale', {
             this.el.object3D.scale.y = this.scaleMin.y
             this.el.object3D.scale.z = this.scaleMin.z          
       }
+      this.el.object3D.matrixNeedsUpdate = true;
+
       // Store cursor position for next frame.
       this.prevPosition.copy(this.dragCursor.position)
     }
@@ -107,6 +109,7 @@ AFRAME.registerComponent('drag-rotate', {
       //Update the rotation of the object as the horizontal change in the cursor position.
       var sensitivity = .75;
       this.el.object3D.rotation.y = (dx + dz) * sensitivity + this.el.object3D.rotation.y;
+      this.el.object3D.matrixNeedsUpdate = true;
      
       // Store cursor position for next frame.
       this.prevPosition.copy(this.dragCursor.position)
@@ -226,3 +229,4 @@ NAF.schemas.add({
 AFRAME.GLTFModelPlus.registerComponent('networked', 'networked')
 AFRAME.GLTFModelPlus.registerComponent('geometry', 'geometry')
 AFRAME.GLTFModelPlus.registerComponent('single-action-button', 'single-action-button')
+AFRAME.GLTFModelPlus.registerComponent('drag-scale-gizmo')

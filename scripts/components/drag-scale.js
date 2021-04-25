@@ -54,6 +54,7 @@ AFRAME.registerComponent('drag-scale', {
             this.el.object3D.scale.x = this.scaleMin.x;
             this.el.object3D.scale.z = this.scaleMin.z;
       }
+      this.el.object3D.matrixNeedsUpdate = true;
       // Store cursor position for next frame.
       this.prevPosition.copy(this.dragCursor.position)
     }

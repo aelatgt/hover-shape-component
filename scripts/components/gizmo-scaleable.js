@@ -5,12 +5,13 @@
 
 AFRAME.registerComponent('gizmo-scaleable', {
   init: function() {
-      this.el.sceneEl.addEventListener("cursor-move", (e) => {
-        let el = document.querySelector("[gizmo-scaleable]") //Get the scaleable entity
-        this.el.object3D.scale.y = this.el.object3D.scale.y + e.detail.change;
-        this.el.object3D.scale.x = this.el.object3D.scale.x + e.detail.change;
-        this.el.object3D.scale.z = this.el.object3D.scale.z + e.detail.change;
-        el.object3D.matrixNeedsUpdate = true; //Need to do this to sync the object3D and the DOM
-   })
+      this.upScale = this.upScale.bind(this)
+      this.el.sceneEl.addEventListener("cursor-move", this.upScale)
   },
+  upScale(e) {
+      this.el.object3D.scale.y = this.el.object3D.scale.y + e.detail.change;
+      this.el.object3D.scale.x = this.el.object3D.scale.x + e.detail.change;
+      this.el.object3D.scale.z = this.el.object3D.scale.z + e.detail.change;
+      el.object3D.matrixNeedsUpdate = true;
+  }
 })

@@ -10,7 +10,7 @@ AFRAME.registerComponent('gizmo-scaleable', {
         this.el.object3D.scale.y = this.el.object3D.scale.y + e.detail.change;
         this.el.object3D.scale.x = this.el.object3D.scale.x + e.detail.change;
         this.el.object3D.scale.z = this.el.object3D.scale.z + e.detail.change;
-        el.object3D.matrixNeedsUpdate = true;
+        el.object3D.matrixNeedsUpdate = true; //Need to do this to sync the object3D and the DOM
    })
   },
 })

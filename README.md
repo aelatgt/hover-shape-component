@@ -14,6 +14,8 @@ To inject these scripts into a Hubs room:
 4. Position the hover-controller and hover-shape (and optionally the drag-scale-gizmo.glb) into a spoke scene and load it into a Hubs room. (OR just drag the glbs into a room. This could cause networking issues though).
 5. Now the entity will change shape when the controller is pressed, rotate if dragged horizontally, and be scaled if the drag-scale-gizmo is either moved, or a vertical drag is used.
 
+Working Demo: https://hubs.aelatgt.net/gaHxurs/hover-shape-component-demo
+
 NOTE: The networked components within this repository seem to currently have the following issues:
 1. When positioning the .glb in Spoke, when a new user joins, the hover-shape can be reset to its initial index, and a duplicate with the correct index will be added to the scene.
 2. If the hover-shape component is not added to the entity and just the drag-scale or drag-rotate are added, the rotation and scale are not synced across users.

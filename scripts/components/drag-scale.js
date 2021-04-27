@@ -37,7 +37,7 @@ AFRAME.registerComponent('drag-scale', {
       // Compute change in cursor vertical position
       const dy = this.dragCursor.position.y - this.prevPosition.y;
 
-      // Take ownership of the `networked` entity and update the networked radius
+      // Take ownership of the `networked` entity and update the networked scale
       if (NAF.connection.isConnected()) {
         NAF.utils.takeOwnership(this.el)
       }
@@ -46,15 +46,17 @@ AFRAME.registerComponent('drag-scale', {
       this.el.object3D.scale.x = this.el.object3D.scale.x + dy;
       this.el.object3D.scale.z = this.el.object3D.scale.z + dy;
       if (this.el.object3D.scale.y > this.scaleMax.y) {
-            this.el.object3D.scale.y = this.scaleMax.y;
-            this.el.object3D.scale.x = this.scaleMax.x;
-            this.el.object3D.scale.z = this.scaleMax.z;
+            this.el.object3D.scale.x = this.scaleMax.x
+            this.el.object3D.scale.y = this.scaleMax.y
+            this.el.object3D.scale.z = this.scaleMax.z      
       } else if (this.el.object3D.scale.y < this.scaleMin.y) {
-            this.el.object3D.scale.y = this.scaleMin.y;
-            this.el.object3D.scale.x = this.scaleMin.x;
-            this.el.object3D.scale.z = this.scaleMin.z;
+            this.el.object3D.scale.x = this.scaleMin.x
+            this.el.object3D.scale.y = this.scaleMin.y
+            this.el.object3D.scale.z = this.scaleMin.z          
       }
+      //Sync the DOM values with the object3D
       this.el.object3D.matrixNeedsUpdate = true;
+
       // Store cursor position for next frame.
       this.prevPosition.copy(this.dragCursor.position)
     }

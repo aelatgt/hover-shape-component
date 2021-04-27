@@ -1,6 +1,86 @@
 
 /**
  * Sets up an entity with the holdable button functionality so that it can alter
+ * its own position horizontally and alter the scale of another entity specified by that change.
+ */
+
+AFRAME.registerComponent('drag-scale-gizmo', {
+  schema: {
+      slideWidth: {default: 2.5} //This will be the distance that we can drag the controller gizmo, as well as the amount that the scale will be changed.
+  },
+  init: function () {
+
+  //Setup holdable button functionality
+    console.log('set remove hover target')
+    this.el.classList.add('interactable')
+    this.el.setAttribute('tags', {
+      isHoldable: true,
+      holdableButton: true,
+    })
+    this.el.setAttribute('is-remote-hover-target', '')
+
+    this.dragCursor = null // This will hold the cursor performing the drag, if any
+    this.prevPosition = new THREE.Vector3() // Position of the cursor on the previous frame. Useful for determining speed of the drag.
+    this.scaleMax = new THREE.Vector3(1.5, 1.5, 1.5);
+    this.scaleMin = new THREE.Vector3(.5, .5, .5);
+    this.slideWidth = this.data.slideWidth;
+    this.initx = this.el.object3D.position.x;
+
+    // Set up handlers for those events we enabled earlier
+    this.el.object3D.addEventListener(
+      'holdable-button-down',
+      ({ object3D }) => {
+        this.dragCursor = object3D
+        this.prevPosition.copy(object3D.position)
+      }
+    )
+    this.el.object3D.addEventListener('holdable-button-up', () => {
+      this.dragCursor = null
+    })
+  },
+  tick: function () {
+    // If any cursor is held down...
+    if (this.dragCursor) {
+      // Compute change in cursor x position
+      var dx = this.dragCursor.position.x - this.prevPosition.x;
+
+      //Update the position of the controller slider 
+      var dslide = (this.el.object3D.position.x + dx) - this.initx //This keeps track of how far we have shifted the gizmo from its initial x position.
+      if (dslide < this.slideWidth && dslide > 0) { //Only update if the value is within our accepted range.
+        	this.el.setAttribute('position', this.el.object3D.position.x + dx + ', ' + this.el.object3D.position.y + ', ' + this.el.object3D.position.z);
+            this.el.emit("cursor-move", {change: dx}, true) //Send this change in x position data to the entity being controlled through event bubbling. (Check gizmo-scaleable.js)
+      }
+
+      // Store cursor position for next frame.
+      this.prevPosition.copy(this.dragCursor.position)
+    }
+  },
+})
+
+/**
+ * Sets up an entity to receive scale changes from a drag-scale-gizmo controller.
+ * 
+ */
+
+AFRAME.registerComponent('gizmo-scaleable', {
+  init: function() {
+      this.upScale = this.upScale.bind(this)
+      //Listen on the scene for the event transferring the amount we should change the scale
+      this.el.sceneEl.addEventListener("cursor-move", this.upScale)
+  },
+  //This method could be altered to change other aspects of the entity, such as transperency.
+  upScale(e) {
+      //Retrieve the event detail for the change in order to scale the object by that amount.
+      this.el.object3D.scale.y = this.el.object3D.scale.y + e.detail.change;
+      this.el.object3D.scale.x = this.el.object3D.scale.x + e.detail.change;
+      this.el.object3D.scale.z = this.el.object3D.scale.z + e.detail.change;
+      el.object3D.matrixNeedsUpdate = true; //Have to call this to sync the Object3D changes with the DOM.
+  }
+})
+
+
+/**
+ * Sets up an entity with the holdable button functionality so that it can alter
  * scale on cursor movement.
  */
 
@@ -37,7 +117,7 @@ AFRAME.registerComponent('drag-scale', {
       // Compute change in cursor vertical position
       const dy = this.dragCursor.position.y - this.prevPosition.y;
 
-      // Take ownership of the `networked` entity and update the networked radius
+      // Take ownership of the `networked` entity and update the networked scale
       if (NAF.connection.isConnected()) {
         NAF.utils.takeOwnership(this.el)
       }
@@ -54,6 +134,7 @@ AFRAME.registerComponent('drag-scale', {
             this.el.object3D.scale.y = this.scaleMin.y
             this.el.object3D.scale.z = this.scaleMin.z          
       }
+      //Sync the DOM values with the object3D
       this.el.object3D.matrixNeedsUpdate = true;
 
       // Store cursor position for next frame.
@@ -102,7 +183,7 @@ AFRAME.registerComponent('drag-rotate', {
       const dz = this.dragCursor.position.z - this.prevPosition.z;
       const dr = this.dragCursor.rotation.y - this.prevRotation.y;
 
-      // Take ownership of the `networked` entity and update the networked radius
+      // Take ownership of the `networked` entity and update the networked rotation
       if (NAF.connection.isConnected()) {
         NAF.utils.takeOwnership(this.el)
       }
@@ -137,7 +218,7 @@ AFRAME.registerComponent('single-action-button', {
 
     // Finally, we'll forward the 'interact' events to our entity for convenience
     this.el.object3D.addEventListener('interact', () =>
-      this.el.emit(this.data.event, {el: this.el}, true)
+      this.el.emit(this.data.event, {el: this.el}, true) //Pass the event on to the hover-shape using event bubbling
     )
   },
 })
@@ -187,6 +268,7 @@ assets.insertAdjacentHTML(
       material="color: blue;"
       drag-rotate
       drag-scale
+      gizmo-scaleable
     ></a-entity>
   </template>
 `
@@ -230,3 +312,4 @@ AFRAME.GLTFModelPlus.registerComponent('networked', 'networked')
 AFRAME.GLTFModelPlus.registerComponent('geometry', 'geometry')
 AFRAME.GLTFModelPlus.registerComponent('single-action-button', 'single-action-button')
 AFRAME.GLTFModelPlus.registerComponent('drag-scale-gizmo')
+AFRAME.GLTFModelPlus.registerComponent('gizmo-scaleable')

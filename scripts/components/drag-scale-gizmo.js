@@ -5,7 +5,7 @@
 
 AFRAME.registerComponent('drag-scale-gizmo', {
   schema: {
-      slideWidth: {default: 2.5}
+      slideWidth: {default: 2.5} //This will be the distance that we can drag the controller gizmo, as well as the amount that the scale will be changed.
   },
   init: function () {
 
@@ -40,14 +40,14 @@ AFRAME.registerComponent('drag-scale-gizmo', {
   tick: function () {
     // If any cursor is held down...
     if (this.dragCursor) {
-      // Compute change in cursor vertical position
+      // Compute change in cursor x position
       var dx = this.dragCursor.position.x - this.prevPosition.x;
 
       //Update the position of the controller slider 
-      var dslide = (this.el.object3D.position.x + dx) - this.initx
-      if (dslide < this.slideWidth && dslide > 0) {
+      var dslide = (this.el.object3D.position.x + dx) - this.initx //This keeps track of how far we have shifted the gizmo from its initial x position.
+      if (dslide < this.slideWidth && dslide > 0) { //Only update if the value is within our accepted range.
         	this.el.setAttribute('position', this.el.object3D.position.x + dx + ', ' + this.el.object3D.position.y + ', ' + this.el.object3D.position.z);
-            this.el.emit("cursor-move", {change: dx}, true)
+            this.el.emit("cursor-move", {change: dx}, true) //Send this change in x position data to the entity being controlled through event bubbling. (Check gizmo-scaleable.js)
       }
 
       // Store cursor position for next frame.

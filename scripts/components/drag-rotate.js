@@ -43,7 +43,7 @@ AFRAME.registerComponent('drag-rotate', {
       if (NAF.connection.isConnected()) {
         NAF.utils.takeOwnership(this.el)
       }
-      //Update the rotation of the object as the horizontal change in the cursor position.
+      //Update the rotation of the object as the horizontal change in the cursor position. This could be changed to position, scale, etc.
       var sensitivity = .75;
       this.el.object3D.rotation.y = (dx + dz) * sensitivity + this.el.object3D.rotation.y;
 
@@ -53,15 +53,3 @@ AFRAME.registerComponent('drag-rotate', {
     }
   },
 })
-
-    getScreenTranslation = function (obj, camera) {
-        var vector = new THREE.Vector3();
-
-        vector.setFromMatrixPosition(obj.matrixWorld);
-        vector.project(camera);
-
-        return {
-                x: vector.x,
-                y: vector.y
-        };
-   };

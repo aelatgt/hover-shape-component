@@ -11,7 +11,7 @@ The components necessary are the drag-rotate component, drag-scale component, th
 The hover-shape-combined.js file registers all of these components, as well as registers the new template which depends on them, and adds an a-entity with the template to a
 scene. These are based off of the examples within hubs-scripting-guide. 
 
-There is also a drag-scale-gizmo component that allows for external control of the scale of the entity. This can be set up by attaching the target entity with the 'gizmo-scaleable' component and adding an entity with drag-scale-gizmo to the scene.
+There is also a drag-scale-gizmo component that allows for external control of the scale of the entity by dragging a seperate gizmo in the x axis. This can be set up by attaching the target entity with the 'gizmo-scaleable' component and adding an entity with drag-scale-gizmo to the scene.
 
 To inject this script into a Hubs room:
 1. Copy the link to the script being served statically on GitHub Pages: https://www.aelatgt.org/hover-shape-component/scripts/hover-shape-combined.js

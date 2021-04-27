@@ -11,6 +11,9 @@ AFRAME.registerComponent('gizmo-scaleable', {
   },
   //This method could be altered to change other aspects of the entity, such as transperency.
   upScale(e) {
+      if (NAF.connection.isConnected()) {
+        NAF.utils.takeOwnership(this.el)
+      }
       //Retrieve the event detail for the change in order to scale the object by that amount.
       this.el.object3D.scale.y = this.el.object3D.scale.y + e.detail.change;
       this.el.object3D.scale.x = this.el.object3D.scale.x + e.detail.change;

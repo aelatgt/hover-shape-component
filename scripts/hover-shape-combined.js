@@ -311,5 +311,5 @@ NAF.schemas.add({
 AFRAME.GLTFModelPlus.registerComponent('networked', 'networked')
 AFRAME.GLTFModelPlus.registerComponent('geometry', 'geometry')
 AFRAME.GLTFModelPlus.registerComponent('single-action-button', 'single-action-button')
-AFRAME.GLTFModelPlus.registerComponent('drag-scale-gizmo')
-AFRAME.GLTFModelPlus.registerComponent('gizmo-scaleable')
+AFRAME.GLTFModelPlus.registerComponent('drag-scale-gizmo', 'drag-scale-gizmo')
+AFRAME.GLTFModelPlus.registerComponent('gizmo-scaleable', 'gizmo-scaleable')
